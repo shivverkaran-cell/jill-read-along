@@ -1597,7 +1597,7 @@
   }
   function applySettings() {
     const root = document.documentElement.style;
-    root.setProperty('--size', settings.size + 'px');
+    root.setProperty('--size', (window.innerWidth < 600 ? Math.min(settings.size, 32) : settings.size) + 'px'); // phones: keep 4-5 words a line
     const bg = BACKGROUNDS.find(b => b.id === settings.bg) || BACKGROUNDS[0];
     root.setProperty('--bg', bg.color);
     root.setProperty('--panel', bg.panel);
@@ -1620,6 +1620,7 @@
   $('#btn-restart').addEventListener('click', resetReading);
   $('#btn-skip-model').addEventListener('click', () => { P.modelDone = true; $('#btn-skip-model').hidden = true; updateControls(); render(); });
   $('#btn-grown').addEventListener('click', openGrownGate);
+  window.addEventListener('resize', applySettings);
   document.addEventListener('visibilitychange', () => { if (document.hidden && P.listening) { stopReading(); render(); } });
   if (window.speechSynthesis) speechSynthesis.onvoiceschanged = () => {};
 
